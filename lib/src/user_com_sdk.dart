@@ -184,7 +184,7 @@ class UserComSDK {
   void buildNotificationOnMessageReceived({
     required BuildContext context,
     Function(InAppMessage)? onInAppMessage,
-    Function(PushNotificationMessage)? onNotificationMessage,
+    Function(PushNotificationMessage, bool)? onNotificationMessage,
   }) {
     if (!NotificationService.messageController.hasListener) {
       NotificationService.messageController.stream.listen(
@@ -209,10 +209,15 @@ class UserComSDK {
           if (notificationAdapter.type == NotificationType.push) {
             final pushMessage =
                 notificationAdapter.message as PushNotificationMessage;
+            final isNotificationFromChannel =
+                message.from == NotificationService.notificationChannelKey;
             if (onNotificationMessage != null) {
-              onNotificationMessage(pushMessage);
+              onNotificationMessage(
+                pushMessage,
+                isNotificationFromChannel,
+              );
             } else {
-              if (message.from == NotificationService.notificationChannelKey) {
+              if (isNotificationFromChannel) {
                 NotificationBuilder.launchCustomTab(
                   repository: _repository,
                   message: pushMessage,
