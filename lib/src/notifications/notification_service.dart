@@ -9,7 +9,6 @@ import 'package:flutter_user_sdk/src/notifications/notification_adapter.dart';
 import 'package:flutter_user_sdk/src/utils/connection_service.dart';
 import 'package:flutter_user_sdk/src/utils/extensions/notification_converters.dart';
 
-@pragma("vm:entry-point")
 class NotificationService {
   static const notificationChannelKey = 'user_com_channel';
   static const _channelName = 'User channel';
@@ -59,6 +58,7 @@ class NotificationService {
     messageController.add(receivedAction.toRemoteMessage());
   }
 
+  @pragma("vm:entry-point")
   static Future<void> _onBackgroundMessage(RemoteMessage message) async {
     if (NotificationAdapter.isUserComMessage(message.data)) {
       final notifiaction = NotificationAdapter.fromJson(message.data);
